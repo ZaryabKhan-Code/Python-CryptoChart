@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+{% set active_link = price %}
+{% set active_link_3 =  volume_change_24h %}
+{% set active_link_4 =  percent_change_24h %}
+{% set active_link_5 =  percent_change_7d %}
+{% set active_link_2 = percent_change_1h %}
+<center>
+{% if active_link_3 >= 0 %}
+<h5 style="padding-left: -20%;">volume_24h: <span style="color: green;">{{'%0.2f' | format(volume_24h|float)}}</span></h5>
+<h5 style="padding-left: -20%;">volume_change_24h: <span style="color: green;">{{'%0.2f' | format(volume_change_24h|float)}}%</span></h5>
+{% else %}
+<h5 style="padding-left: -20%;">volume_24h: <span style="color: red;">{{'%0.2f' | format(volume_24h|float)}}</span></h5>
+<h5 style="padding-left: -20%;">volume_change_24h: <span style="color: red;">{{'%0.2f' | format(volume_change_24h|float)}}%</span></h5>
+{% endif %}
+<h2 style="padding-left: -20%;">{{name}}</h1>
+<h2 style="padding-left: -20%;">{{symbol}}</h2>
+{% if active_link >= 1 %}
+<h2 style="padding-left: -20%;">${{'%0.2f' | format(price|float)}}</h2>
+{% else %}
+<h2 style="padding-left: -20%;">${{'%0.6f' | format(price|float)}}</h2>
+{% endif %}
+{% if active_link_2 >= 0 %}
+<h2 style="color: green;"><img src="{{url_for('static',filename='up.png')}}" alt="up">{{'%0.3f' | format(percent_change_1h)}}%</h2></center>
+{% else %}
+<h2 style="color: red;"><img src="{{url_for('static',filename='down.png')}}" alt="down">{{'%0.3f' | format(percent_change_1h)}}%</h2></center>
+{% endif %}
+<center><h1 style="padding-top: 5%">More Information</h1>
+<h2>Market Pairs <br>{{num_market_pairs}}</h2>
+<h2>Circulate Supplies <br>{{circulating_supply}}</h2>
+<h2>Total Supplies <br>{{(total_supply)}}</h2>
+{% if max_supply=='None' %}
+<h2>Max Supplies <br>Not defined</h2>
+<br>
+{% else %}
+<h2>Max Supplies <br>{{max_supply}}</h2>
+<br>
+{% endif %}
+{% if active_link_4 >= 0 %}
+<h2>Percent Change 24h <br><span style="color:green;"><img src="{{url_for('static',filename='up.png')}}" alt="up">{{'%0.3f' | format(percent_change_24h|float)}}%</span></h2>
+{% else %}
+<h2>Percent Change 24h <br><span style="color:red;"><img src="{{url_for('static',filename='down.png')}}" alt="up">{{'%0.3f' | format(percent_change_24h|float)}}%</span></h2>
+{% endif %}
+{% if active_link_5 >= 0 %}
+<h2>Percent Change 7d <br><span style="color:green;"><img src="{{url_for('static',filename='up.png')}}" alt="up">{{'%0.3f' | format(percent_change_7d|float)}}%</span></h2>
+<br>
+{% else %}
+<h2>Percent Change 7d <br><span style="color:red;"><img src="{{url_for('static',filename='down.png')}}" alt="up">{{'%0.3f' | format(percent_change_7d|float)}}%</span></h2>
+<br>
+{% endif %}
+<h2>Market Cap <br>{{'%0.0f' | format(market_cap|float)}}</h2>
+<h2>Market Cap Dominance <br>{{'%0.2f' | format(market_cap_dominance|float)}}</h2>
+<h2>Diluted Market Cap <br>{{'%0.2f' | format(fully_diluted_market_cap)}}</h2>
+{% endblock %}

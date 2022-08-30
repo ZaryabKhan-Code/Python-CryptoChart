@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for coins" title="Type in a name">
+    <table table id="data" class="table table-striped">
+      <thead>
+        <tr>
+        <th>Coin</th>
+        <th>Symbol</th>
+        <th>Trend</th>
+        <th>Price</th>
+      </thead>
+      <tbody>
+        <tr>
+         </tr>
+         {% for obj in results %}
+         <tr>
+          {% set active_link = obj.quote.USD.price %}
+          {% set active_link_2 = obj.quote.USD.percent_change_1h %}
+           <td><a href="/coin/{{obj.id}}/{{obj.name}}/{{obj.symbol}}/{{obj.cmc_rank}}/{{obj.num_market_pairs}}/{{obj.circulating_supply}}/{{obj.total_supply}}/{{obj.max_supply}}/{{obj.last_updated}}/{{obj.date_added}}/{{obj.quote.USD.price}}/{{obj.quote.USD.volume_24h}}/{{obj.quote.USD.volume_change_24h}}/{{obj.quote.USD.percent_change_1h}}//{{obj.quote.USD.percent_change_24h}}/{{obj.quote.USD.percent_change_7d}}/{{obj.quote.USD.market_cap}}/{{obj.quote.USD.market_cap_dominance}}/{{obj.quote.USD.fully_diluted_market_cap}}" style="text-decoration: none;">{{obj.name}}</a></td>
+           <td>{{obj.symbol}}</td>
+           {% if active_link_2 >= 0 %}
+           <td style="color: green;"><img src="{{url_for('static',filename='up.png')}}" alt="up">{{'%0.3f' | format(obj.quote.USD.percent_change_1h)}}<br>mcd {{'%0.1f'|format(obj.quote.USD.market_cap_dominance)}}%</td>
+           {% else %}
+           <td style="color: red;"><img src="{{url_for('static',filename='down.png')}}" alt="down">{{'%0.3f' | format(obj.quote.USD.percent_change_1h)}}<br>mcd {{'%0.1f'| format(obj.quote.USD.market_cap_dominance)}}%</td>
+           {% endif %}
+           {% if active_link >= 1 %}
+           <td>${{'%0.2f' | format(obj.quote.USD.price|float)}}<br>mp {{(obj.num_market_pairs)}}</td>
+           {% else %}
+           <td>${{'%0.6f' | format(obj.quote.USD.price|float)}}<br>mp {{obj.num_market_pairs}}</td>
+           {% endif %}
+           </tr>
+         {% endfor %}
+      </tbody>
+    </table>
+    {% if 1 >= page %}
+    <a class="btn btn-primary float-right" href="{{next}}">Next &rarr;</a>
+    {% else %}
+    <a class="btn btn-primary float-left" href="{{prev}}"> &larr;Previous</a>
+    <a class="btn btn-primary float-right" href="{{next}}">Next &rarr;</a>
+    {% endif %}
+  </div>
+    </div>
+    <br>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+    
+    <script>
+      function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("data");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }       
+        }
+      }
+      </script>
+  {% endblock %}
